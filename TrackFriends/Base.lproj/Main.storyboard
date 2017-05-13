@@ -34,6 +34,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="b7l-SP-0OO">
+                        <barButtonItem key="leftBarButtonItem" title="Add Number" id="VnN-F8-nrz">
+                            <connections>
+                                <action selector="presentActionSheetForNumber:" destination="BYZ-38-t0r" id="odU-uS-45p"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="EHu-qx-L2e">
                             <connections>
                                 <action selector="showContactsList:" destination="BYZ-38-t0r" id="jve-iV-AaR"/>

@@ -31,10 +31,10 @@ class TFMapLocateMeViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Add banner to indicate message
         if let yPosition = self.navigationController?.navigationBar.frame.maxY {
             let frame = CGRect(x: self.view.frame.origin.x, y: yPosition, width: self.view.bounds.width, height: 30)
-            self.bannerView = TFBannerView(withFrame: frame, message: "Tap on Phone icon to enter your phone number. This is to help you to locate friends by asking permission")
+            
+            self.bannerView = TFBannerView(withFrame: frame, message: "Tap on Phone icon to enter your phone number. This is to help your friend to locate friends by asking permission")
             guard  let bannerView = self.bannerView else { return }
             
             self.view.addSubview(bannerView)
@@ -44,9 +44,38 @@ class TFMapLocateMeViewController: UIViewController {
     }
     
     func dismissBannerView() {
-        self.bannerView?.removeFromSuperview()
+        UIView.animate(withDuration: 1.2, delay: 0.1, options: .curveEaseOut, animations: {
+            self.bannerView?.alpha = 0.0
+        }) { (isCompleted) in
+            self.bannerView?.isHidden = true
+        }
     }
     
+    @IBAction func presentActionSheetForNumber(_ sender: Any) {
+        let alertController = UIAlertController(title: "Enter Phone number", message: "Please enter your phone number.", preferredStyle: .alert)
+        
+        alertController.addTextField { (textField) in
+            textField.placeholder = "9876543210"
+        }
+        
+        let alertAction = UIAlertAction(title: "Confirm Number", style: .destructive) { (action) in
+            guard let textField =  alertController.textFields?.first else { return }
+           
+            if let value = textField.text, let uniqueValue = UIDevice.current.identifierForVendor?.uuidString {
+                let uniqueUserDetails = UniqueUserDetails(withPhoneNumber: value, deviceID: uniqueValue)
+                uniqueUserDetails.syncToServer()
+            }
+            
+            // Sent to server with unique id as well
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(alertAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
     
     @IBAction func showContactsList(_ sender: Any) {
            let contactViewController = CNContactPickerViewController()
