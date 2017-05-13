@@ -11,14 +11,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var realm: RealmServer?
+    var realmServer: RealmServer?
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        self.realm = RealmServer()
-        self.realm?.setupRealm()
+        self.realmServer = RealmServer()
+        self.realmServer?.setupRealm()
+        self.realmServer?.realm?.deleteAll()
         
         return true
     }

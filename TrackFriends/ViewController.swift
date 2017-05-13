@@ -17,22 +17,26 @@ class TFMapLocateMeViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     fileprivate var locationManager = CLLocationManager()
     lazy var contactStore: CNContactStore = CNContactStore()
+    var shouldContinuouslyShareLocation = false
+    
+     var appDelegate: AppDelegate? {
+        get {
+            return UIApplication.shared.delegate as? AppDelegate
+        }
+    }
+    
     var bannerView: TFBannerView?
-    var notificationToken: NotificationToken!
-    var realm: Realm!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Your Location"
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(TFMapLocateMeViewController.shareLocation), name:  NSNotification.Name(rawValue: "StartSharingYurLcoation"), object: nil)
 
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.startUpdatingLocation()
         locationManager.requestWhenInUseAuthorization()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
         if let yPosition = self.navigationController?.navigationBar.frame.maxY {
             let frame = CGRect(x: self.view.frame.origin.x, y: yPosition, width: self.view.bounds.width, height: 30)
@@ -44,6 +48,10 @@ class TFMapLocateMeViewController: UIViewController {
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(TFMapLocateMeViewController.dismissBannerView))
             bannerView.addGestureRecognizer(tapGesture)
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     func dismissBannerView() {
@@ -63,21 +71,7 @@ class TFMapLocateMeViewController: UIViewController {
         
         let alertAction = UIAlertAction(title: "Confirm Number", style: .destructive) { (action) in
             guard let textField =  alertController.textFields?.first else { return }
-           
-            if let value = textField.text, let uniqueValue = UIDevice.current.identifierForVendor?.uuidString {
-                
-                
-                
-                let uniqueUserDetails = UniqueUserDetails(withPhoneNumber: value, deviceID: uniqueValue)
-                
-                if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                    appDelegate.realm?.writeData(data: uniqueUserDetails)
-                    
-                    appDelegate.realm?.fetchDataOf(type: uniqueUserDetails)
-                }
-            }
-            
-            // Sent to server with unique id as well
+            self.syncEnteredNumberToRealm(number: textField.text)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -90,42 +84,116 @@ class TFMapLocateMeViewController: UIViewController {
     
     @IBAction func showContactsList(_ sender: Any) {
            let contactViewController = CNContactPickerViewController()
-        contactViewController.displayedPropertyKeys = [CNContactUrlAddressesKey, CNContactPostalAddressesKey]
         contactViewController.delegate = self
         self.present(contactViewController, animated: true, completion: nil)
 
     }
-        
-    deinit {
-        notificationToken.stop()
+    
+    // Pragma - server sync
+    func syncEnteredNumberToRealm(number: String?) {
+        if let value = number, let uniqueValue = UIDevice.current.identifierForVendor?.uuidString {
+            
+            DispatchQueue.global(qos: .background).async {
+                let userDefaults = UserDefaults.standard
+                userDefaults.set(uniqueValue, forKey: "uniqueID")
+                userDefaults.synchronize()
+
+            }
+            
+            let uniqueUserDetails = UniqueUserDetails(withPhoneNumber: value, deviceID: uniqueValue)
+            
+            if let appDelegate = self.appDelegate {
+                
+                if let users = appDelegate.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
+                    
+                    do {
+                        try appDelegate.realmServer?.realm?.write {
+                            users.listOfUsers.append(uniqueUserDetails)
+                        }
+                    }
+                    catch {
+                        
+                    }
+
+                }
+                else {
+                    let user = Users()
+                    user.listOfUsers.append(uniqueUserDetails)
+                    appDelegate.realmServer?.writeData(data: user)
+                }
+            }
+        }
     }
 }
 
 extension TFMapLocateMeViewController: CNContactPickerDelegate {
-    public func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
-        
-    }
-    
     public func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
+         let value = contactProperty.contact.phoneNumbers[0].value.stringValue
+            if let users = self.appDelegate?.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
+               self.updateUniqueUserForValue(number: value, user: users)
+            }
+    }
+    
+    func updateUniqueUserForValue(number: String, user: Users) {
+        let phoneValue = number.components(separatedBy: CharacterSet.decimalDigits.inverted)
+            .joined()
         
+        for eachUniqueUser in user.listOfUsers {
+            if eachUniqueUser.phone == phoneValue {
+                
+                try! self.appDelegate?.realmServer?.realm?.write {
+                    eachUniqueUser.isRequestedForLocationAccess = true
+                     self.appDelegate?.realmServer?.registerNotification()
+                }
+                
+                break
+            }
+        }
+
     }
     
     
-//    /*!
-//     * @abstract Plural delegate methods.
-//     * @discussion These delegate methods will be invoked when the user is done selecting multiple contacts or properties.
-//     * Implementing one of these methods will configure the picker for multi-selection.
-//     */
-//    public func contactPicker(_ picker: CNContactPickerViewController, didSelect contacts: [CNContact]) {
-//        
-//    }
-//    
-//    public func contactPicker(_ picker: CNContactPickerViewController, didSelectContactProperties contactProperties: [CNContactProperty]) {
-//        
-//    }
+    
 }
 
 extension TFMapLocateMeViewController: CLLocationManagerDelegate {
+    
+    func shareLocation() {
+        
+        let alertController = UIAlertController(title: "Sharing your location", message: "We're sharing your location", preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Okay", style: .default) { (action) in
+            self.locationManager.startUpdatingLocation()
+            self.shouldContinuouslyShareLocation = true
+
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+        
+        
+        alertController.addAction(okAction)
+        alertController.addAction(cancelAction)
+        alertController.preferredAction = okAction
+
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func findUser() -> UniqueUserDetails? {
+        
+        let userDefaults = UserDefaults.standard
+        let deviceID = userDefaults.value(forKey: "uniqueID") as? String
+
+        
+        if let users = self.appDelegate?.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
+            for eachUser in users.listOfUsers {
+                if eachUser.deviceID == deviceID {
+                    return eachUser
+                }
+            }
+        }
+        
+        return nil
+    }
+
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if locations.isEmpty == false {
@@ -134,10 +202,20 @@ extension TFMapLocateMeViewController: CLLocationManagerDelegate {
              print(finalLocation.horizontalAccuracy)
             
             if finalLocation.horizontalAccuracy < 2000 {
-                self.locationManager.stopUpdatingLocation()
-                let span = MKCoordinateSpan(latitudeDelta: 0.014, longitudeDelta: 0.014)
-                let region = MKCoordinateRegion(center: finalLocation.coordinate, span: span)
-                self.mapView.setRegion(region, animated: true)
+                
+                if self.shouldContinuouslyShareLocation == false {
+                    self.locationManager.stopUpdatingLocation()
+                    let span = MKCoordinateSpan(latitudeDelta: 0.014, longitudeDelta: 0.014)
+                    let region = MKCoordinateRegion(center: finalLocation.coordinate, span: span)
+                    self.mapView.setRegion(region, animated: true)
+                }
+                else {
+                    // Start updating latitude and logitude to server
+                    
+                    if let user = self.findUser() {
+                        user.updateCordinates(longitude: Float(finalLocation.coordinate.longitude), latitude: Float(finalLocation.coordinate.latitude))
+                    }
+                }
             }
         }
     }

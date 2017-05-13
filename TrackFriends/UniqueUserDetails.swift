@@ -11,6 +11,10 @@ import RealmSwift
 class UniqueUserDetails: Object {
     dynamic var phone: String?
     dynamic var deviceID: String?
+    dynamic var isRequestedForLocationAccess = false
+    var latitude: Float?
+    var longitude: Float?
+    
     
     convenience init(withPhoneNumber number: String?, deviceID: String) {
         self.init()
@@ -18,20 +22,25 @@ class UniqueUserDetails: Object {
         self.deviceID = deviceID
     }
     
-//    func syncToServer() {
-//        
-//        do {
-//            let realm = try Realm()
-//            
-//            try realm.write {
-//                 realm.add(self)
-//            }
-//            
-//            print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
-//        }
-//        catch {
-//            
-//        }
-//    }
+    func updateCordinates(longitude: Float, latitude: Float) {
+        self.longitude = longitude
+        self.latitude = latitude
+    }
+}
+
+class Users: Object {
+    let listOfUsers = List<UniqueUserDetails>()
     
+    func updateUniqueUserForValue(number: String) {
+        
+        let phoneValue = number.components(separatedBy: CharacterSet.decimalDigits.inverted)
+            .joined()
+        
+        for eachUniqueUser in listOfUsers {
+            if eachUniqueUser.phone == phoneValue {
+                eachUniqueUser.isRequestedForLocationAccess = true
+                break
+            }
+        }
+    }
 }

@@ -8,17 +8,16 @@
 
 import Foundation
 import RealmSwift
+import UIKit
 
 struct Constants {
     #if os(OSX)
     static let syncHost = "127.0.0.1"
     #else
-    static let syncHost = "169.254.249.89"
+    static let syncHost = "169.254.95.14"
     #endif
     
     static let syncRealmPath = "TrackFriends"
-    static let defaultListName = "My Tasks"
-    static let defaultListID = "80EB1620-165B-4600-A1B1-D97032FDD9A0"
     
     static let syncServerURL = URL(string: "realm://\(syncHost):9080/~/\(syncRealmPath)")!
     static let syncAuthURL = URL(string: "http://\(syncHost):9080")!
@@ -38,7 +37,7 @@ class RealmServer {
         
         SyncUser.logIn(with: .usernamePassword(username: userName, password: password, register: false), server: Constants.syncAuthURL) { user, error in
             guard let user = user else {
-                fatalError(String(describing: error))
+                 fatalError(String(describing: error))
             }
             
             DispatchQueue.main.async {
@@ -52,7 +51,7 @@ class RealmServer {
         }        
     }
     
-    func writeData(data: UniqueUserDetails) {
+    func writeData(data: Users) {
         
         do {
             try self.realm?.write {
@@ -67,23 +66,45 @@ class RealmServer {
         }
     }
     
-    func fetchDataOf(type: UniqueUserDetails) {
-        var listOfValues = [UniqueUserDetails]()
+    func fetchUsersData() -> Users? {
         
-        if let values = self.realm?.objects(UniqueUserDetails.self).first {
-            listOfValues = [values]
+        if let value = self.realm?.objects(Users.self).first {
+             return value
         }
         
-        print("\(listOfValues)")
+        return nil
     }
     
     func registerNotification() {
         self.notificationToken = self.realm?.addNotificationBlock({ (notification, realm) in
-            print("Write is successfull")
+            self.shouldShowNotifcationForLocationAccess(user: realm.objects(Users.self).first!)
         })
     }
+    
+    // TODO: Enable APNS
+    
+    func shouldShowNotifcationForLocationAccess(user: Users) {
+        let userDefaults = UserDefaults.standard
+        let deviceID = userDefaults.value(forKey: "uniqueID") as? String
+        
+        
+        for eachUser in user.listOfUsers {
+            if eachUser.deviceID == deviceID {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "StartSharingYurLcoation"), object: nil)
+                break;
+            }
+        }
+    }
+    
     
     deinit {
         notificationToken?.stop()
     }
+    
+    func deleteAllRealm() {
+        try! self.realm?.write {
+            self.realm?.deleteAll()
+        }
+    }
+    
 }
