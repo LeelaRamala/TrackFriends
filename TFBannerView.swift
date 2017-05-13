@@ -2,6 +2,7 @@
 //  TFBannerView.swift
 //  TrackFriends
 //
+//  Created by Ramala Srinivasulu, Leela on 5/13/17.
 //  Copyright © 2017 Toms. All rights reserved.
 //
 
