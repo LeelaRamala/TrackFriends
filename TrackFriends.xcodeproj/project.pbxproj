@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3B12A50F1EC5F83C00FB12D6 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B12A50D1EC5F83C00FB12D6 /* Realm.framework */; };
+		3B12A5101EC5F83C00FB12D6 /* Realm.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B12A50D1EC5F83C00FB12D6 /* Realm.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3B12A5111EC5F83C00FB12D6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B12A50E1EC5F83C00FB12D6 /* RealmSwift.framework */; };
+		3B12A5121EC5F83C00FB12D6 /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3B12A50E1EC5F83C00FB12D6 /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3B12A5191EC6DFC300FB12D6 /* UniqueUserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A5181EC6DFC300FB12D6 /* UniqueUserDetails.swift */; };
+		3B12A51C1EC6E2D300FB12D6 /* TFBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A51B1EC6E2D300FB12D6 /* TFBannerView.swift */; };
+		3B12A51F1EC6F00400FB12D6 /* UIColorAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A51E1EC6F00400FB12D6 /* UIColorAdditions.swift */; };
+		3B39C7881EC3124000A2E202 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39C7871EC3124000A2E202 /* MapKit.framework */; };
+		3BC0026E1EC312C6007428DF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BC0026D1EC312C6007428DF /* CoreLocation.framework */; };
 		3BE7AFFD1EC0DF99001F745B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE7AFFC1EC0DF99001F745B /* AppDelegate.swift */; };
 		3BE7AFFF1EC0DF99001F745B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE7AFFE1EC0DF99001F745B /* ViewController.swift */; };
 		3BE7B0021EC0DF99001F745B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3BE7B0001EC0DF99001F745B /* Main.storyboard */; };
@@ -33,7 +42,29 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3B12A5131EC5F83C00FB12D6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3B12A5121EC5F83C00FB12D6 /* RealmSwift.framework in Embed Frameworks */,
+				3B12A5101EC5F83C00FB12D6 /* Realm.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3B12A50D1EC5F83C00FB12D6 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Realm.framework; sourceTree = "<group>"; };
+		3B12A50E1EC5F83C00FB12D6 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = "<group>"; };
+		3B12A5181EC6DFC300FB12D6 /* UniqueUserDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniqueUserDetails.swift; sourceTree = "<group>"; };
+		3B12A51B1EC6E2D300FB12D6 /* TFBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TFBannerView.swift; sourceTree = "<group>"; };
+		3B12A51E1EC6F00400FB12D6 /* UIColorAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorAdditions.swift; sourceTree = "<group>"; };
+		3B39C7871EC3124000A2E202 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		3BC0026D1EC312C6007428DF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3BE7AFF91EC0DF99001F745B /* TrackFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3BE7AFFC1EC0DF99001F745B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3BE7AFFE1EC0DF99001F745B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -54,6 +85,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B12A50F1EC5F83C00FB12D6 /* Realm.framework in Frameworks */,
+				3BC0026E1EC312C6007428DF /* CoreLocation.framework in Frameworks */,
+				3B12A5111EC5F83C00FB12D6 /* RealmSwift.framework in Frameworks */,
+				3B39C7881EC3124000A2E202 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,13 +109,61 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3B12A5141EC5F90E00FB12D6 /* Realm Swift */ = {
+			isa = PBXGroup;
+			children = (
+				3B12A50D1EC5F83C00FB12D6 /* Realm.framework */,
+				3B12A50E1EC5F83C00FB12D6 /* RealmSwift.framework */,
+			);
+			name = "Realm Swift";
+			sourceTree = "<group>";
+		};
+		3B12A5161EC6DE2D00FB12D6 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3B12A5181EC6DFC300FB12D6 /* UniqueUserDetails.swift */,
+			);
+			name = Models;
+			path = TrackFriends;
+			sourceTree = "<group>";
+		};
+		3B12A51A1EC6E2BA00FB12D6 /* UI Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3B12A51B1EC6E2D300FB12D6 /* TFBannerView.swift */,
+			);
+			name = "UI Helpers";
+			sourceTree = "<group>";
+		};
+		3B12A51D1EC6EFD800FB12D6 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				3B12A51E1EC6F00400FB12D6 /* UIColorAdditions.swift */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		3B39C7861EC3124000A2E202 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BC0026D1EC312C6007428DF /* CoreLocation.framework */,
+				3B39C7871EC3124000A2E202 /* MapKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3BE7AFF01EC0DF98001F745B = {
 			isa = PBXGroup;
 			children = (
+				3B12A51D1EC6EFD800FB12D6 /* Categories */,
+				3B12A51A1EC6E2BA00FB12D6 /* UI Helpers */,
+				3B12A5161EC6DE2D00FB12D6 /* Models */,
+				3B12A5141EC5F90E00FB12D6 /* Realm Swift */,
 				3BE7AFFB1EC0DF99001F745B /* TrackFriends */,
 				3BE7B0101EC0DF99001F745B /* TrackFriendsTests */,
 				3BE7B01B1EC0DF99001F745B /* TrackFriendsUITests */,
 				3BE7AFFA1EC0DF99001F745B /* Products */,
+				3B39C7861EC3124000A2E202 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,6 +218,8 @@
 				3BE7AFF51EC0DF99001F745B /* Sources */,
 				3BE7AFF61EC0DF99001F745B /* Frameworks */,
 				3BE7AFF71EC0DF99001F745B /* Resources */,
+				3B12A5131EC5F83C00FB12D6 /* Embed Frameworks */,
+				3B12A5151EC5F9F200FB12D6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -193,6 +278,7 @@
 				TargetAttributes = {
 					3BE7AFF81EC0DF99001F745B = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = TRQCCTHEJG;
 						ProvisioningStyle = Automatic;
 					};
 					3BE7B00C1EC0DF99001F745B = {
@@ -254,13 +340,32 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3B12A5151EC5F9F200FB12D6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework/strip-frameworks.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3BE7AFF51EC0DF99001F745B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B12A51C1EC6E2D300FB12D6 /* TFBannerView.swift in Sources */,
+				3B12A5191EC6DFC300FB12D6 /* UniqueUserDetails.swift in Sources */,
 				3BE7AFFF1EC0DF99001F745B /* ViewController.swift in Sources */,
 				3BE7AFFD1EC0DF99001F745B /* AppDelegate.swift in Sources */,
+				3B12A51F1EC6F00400FB12D6 /* UIColorAdditions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,10 +518,16 @@
 		3BE7B0221EC0DF99001F745B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = TRQCCTHEJG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TrackFriends/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriends;
+				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriends123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -425,10 +536,16 @@
 		3BE7B0231EC0DF99001F745B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = TRQCCTHEJG;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TrackFriends/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriends;
+				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriends123;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -439,6 +556,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = RealmSwift.framework;
 				INFOPLIST_FILE = TrackFriendsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriendsTests;
@@ -453,6 +571,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = RealmSwift.framework;
 				INFOPLIST_FILE = TrackFriendsTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriendsTests;
@@ -466,6 +585,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = RealmSwift.framework;
 				INFOPLIST_FILE = TrackFriendsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriendsUITests;
@@ -479,6 +599,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = RealmSwift.framework;
 				INFOPLIST_FILE = TrackFriendsUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = helpy.TrackFriendsUITests;
@@ -507,6 +628,7 @@
 				3BE7B0231EC0DF99001F745B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3BE7B0241EC0DF99001F745B /* Build configuration list for PBXNativeTarget "TrackFriendsTests" */ = {
 			isa = XCConfigurationList;
@@ -515,6 +637,7 @@
 				3BE7B0261EC0DF99001F745B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3BE7B0271EC0DF99001F745B /* Build configuration list for PBXNativeTarget "TrackFriendsUITests" */ = {
 			isa = XCConfigurationList;
@@ -523,6 +646,7 @@
 				3BE7B0291EC0DF99001F745B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
