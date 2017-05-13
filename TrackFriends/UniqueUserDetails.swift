@@ -18,20 +18,20 @@ class UniqueUserDetails: Object {
         self.deviceID = deviceID
     }
     
-    func syncToServer() {
-        
-        do {
-            let realm = try Realm()
-            
-            try realm.write {
-                 realm.add(self)
-            }
-            
-            print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
-        }
-        catch {
-            
-        }
-    }
+//    func syncToServer() {
+//        
+//        do {
+//            let realm = try Realm()
+//            
+//            try realm.write {
+//                 realm.add(self)
+//            }
+//            
+//            print(Realm.Configuration.defaultConfiguration.fileURL ?? "")
+//        }
+//        catch {
+//            
+//        }
+//    }
     
 }

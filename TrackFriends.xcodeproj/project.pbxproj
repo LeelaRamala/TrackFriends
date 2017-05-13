@@ -14,6 +14,7 @@
 		3B12A5191EC6DFC300FB12D6 /* UniqueUserDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A5181EC6DFC300FB12D6 /* UniqueUserDetails.swift */; };
 		3B12A51C1EC6E2D300FB12D6 /* TFBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A51B1EC6E2D300FB12D6 /* TFBannerView.swift */; };
 		3B12A51F1EC6F00400FB12D6 /* UIColorAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A51E1EC6F00400FB12D6 /* UIColorAdditions.swift */; };
+		3B12A5231EC733ED00FB12D6 /* RealmHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B12A5221EC733ED00FB12D6 /* RealmHelper.swift */; };
 		3B39C7881EC3124000A2E202 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39C7871EC3124000A2E202 /* MapKit.framework */; };
 		3BC0026E1EC312C6007428DF /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BC0026D1EC312C6007428DF /* CoreLocation.framework */; };
 		3BE7AFFD1EC0DF99001F745B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE7AFFC1EC0DF99001F745B /* AppDelegate.swift */; };
@@ -63,6 +64,7 @@
 		3B12A5181EC6DFC300FB12D6 /* UniqueUserDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UniqueUserDetails.swift; sourceTree = "<group>"; };
 		3B12A51B1EC6E2D300FB12D6 /* TFBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TFBannerView.swift; sourceTree = "<group>"; };
 		3B12A51E1EC6F00400FB12D6 /* UIColorAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorAdditions.swift; sourceTree = "<group>"; };
+		3B12A5221EC733ED00FB12D6 /* RealmHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmHelper.swift; sourceTree = "<group>"; };
 		3B39C7871EC3124000A2E202 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		3BC0026D1EC312C6007428DF /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		3BE7AFF91EC0DF99001F745B /* TrackFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,13 +111,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3B12A5141EC5F90E00FB12D6 /* Realm Swift */ = {
+		3B12A5141EC5F90E00FB12D6 /* Realm Swift Framework */ = {
 			isa = PBXGroup;
 			children = (
 				3B12A50D1EC5F83C00FB12D6 /* Realm.framework */,
 				3B12A50E1EC5F83C00FB12D6 /* RealmSwift.framework */,
 			);
-			name = "Realm Swift";
+			name = "Realm Swift Framework";
 			sourceTree = "<group>";
 		};
 		3B12A5161EC6DE2D00FB12D6 /* Models */ = {
@@ -143,6 +145,14 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
+		3B12A5201EC7335000FB12D6 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				3B12A5221EC733ED00FB12D6 /* RealmHelper.swift */,
+			);
+			name = Realm;
+			sourceTree = "<group>";
+		};
 		3B39C7861EC3124000A2E202 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,10 +165,11 @@
 		3BE7AFF01EC0DF98001F745B = {
 			isa = PBXGroup;
 			children = (
+				3B12A5201EC7335000FB12D6 /* Realm */,
 				3B12A51D1EC6EFD800FB12D6 /* Categories */,
 				3B12A51A1EC6E2BA00FB12D6 /* UI Helpers */,
 				3B12A5161EC6DE2D00FB12D6 /* Models */,
-				3B12A5141EC5F90E00FB12D6 /* Realm Swift */,
+				3B12A5141EC5F90E00FB12D6 /* Realm Swift Framework */,
 				3BE7AFFB1EC0DF99001F745B /* TrackFriends */,
 				3BE7B0101EC0DF99001F745B /* TrackFriendsTests */,
 				3BE7B01B1EC0DF99001F745B /* TrackFriendsUITests */,
@@ -362,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B12A51C1EC6E2D300FB12D6 /* TFBannerView.swift in Sources */,
+				3B12A5231EC733ED00FB12D6 /* RealmHelper.swift in Sources */,
 				3B12A5191EC6DFC300FB12D6 /* UniqueUserDetails.swift in Sources */,
 				3BE7AFFF1EC0DF99001F745B /* ViewController.swift in Sources */,
 				3BE7AFFD1EC0DF99001F745B /* AppDelegate.swift in Sources */,

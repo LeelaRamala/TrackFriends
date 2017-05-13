@@ -10,6 +10,7 @@ import MapKit
 import CoreLocation
 import Contacts
 import ContactsUI
+import RealmSwift
 
 class TFMapLocateMeViewController: UIViewController {
 
@@ -17,6 +18,8 @@ class TFMapLocateMeViewController: UIViewController {
     fileprivate var locationManager = CLLocationManager()
     lazy var contactStore: CNContactStore = CNContactStore()
     var bannerView: TFBannerView?
+    var notificationToken: NotificationToken!
+    var realm: Realm!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +65,16 @@ class TFMapLocateMeViewController: UIViewController {
             guard let textField =  alertController.textFields?.first else { return }
            
             if let value = textField.text, let uniqueValue = UIDevice.current.identifierForVendor?.uuidString {
+                
+                
+                
                 let uniqueUserDetails = UniqueUserDetails(withPhoneNumber: value, deviceID: uniqueValue)
-                uniqueUserDetails.syncToServer()
+                
+                if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                    appDelegate.realm?.writeData(data: uniqueUserDetails)
+                    
+                    appDelegate.realm?.fetchDataOf(type: uniqueUserDetails)
+                }
             }
             
             // Sent to server with unique id as well
@@ -84,50 +95,10 @@ class TFMapLocateMeViewController: UIViewController {
         self.present(contactViewController, animated: true, completion: nil)
 
     }
-    
-    /*
-    func findContacts()-> [CNContact] {
         
-        var contacts = [CNContact]()
-        
-        if self.isContactsAccessGranted() {
-            DispatchQueue.main.async(execute: { () -> Void in
-                do {
-                    let predicate: NSPredicate = NSPredicate(value: true)
-                    let keysToFetch = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactBirthdayKey, CNContactViewController.descriptorForRequiredKeys()] as [Any]
-                    contacts = try self.contactStore.unifiedContacts(matching: predicate, keysToFetch:keysToFetch as! [CNKeyDescriptor])
-                    
-                }
-                catch {
-                    print("Unable to refetch the selected contact.")
-                }
-            })
-        }
-        
-        return contacts
+    deinit {
+        notificationToken.stop()
     }
-    
-    
-    func isContactsAccessGranted() -> Bool {
-       let authStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
-        var accessStatus = false
-        
-        switch authStatus {
-        case .authorized:
-            accessStatus = true
-            return accessStatus
-        case .denied, .restricted, .notDetermined:
-            accessStatus = false
-        }
-        
-        self.contactStore.requestAccess(for: CNEntityType.contacts) { (isGranted, error) in
-            if isGranted {
-                accessStatus = true
-            }
-        }
-        
-        return accessStatus
-    } */
 }
 
 extension TFMapLocateMeViewController: CNContactPickerDelegate {
