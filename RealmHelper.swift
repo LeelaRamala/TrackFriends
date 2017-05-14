@@ -14,7 +14,7 @@ struct Constants {
     #if os(OSX)
     static let syncHost = "127.0.0.1"
     #else
-    static let syncHost = "169.254.95.14"
+    static let syncHost = "169.254.93.56"
     #endif
     
     static let syncRealmPath = "TrackFriends"
@@ -32,23 +32,55 @@ class RealmServer {
     var notificationToken: NotificationToken?
     
     func setupRealm() {
-        let userName = "leela.jyothi91@gmail.com"
+        let userName = "sindhu.ramala01@gmail.com"
         let password = "Leela@13"
         
-        SyncUser.logIn(with: .usernamePassword(username: userName, password: password, register: false), server: Constants.syncAuthURL) { user, error in
+        
+        let creds = SyncCredentials.usernamePassword(username: userName, password: password, register: false)
+        
+        SyncUser.logIn(with: creds, server: Constants.syncAuthURL, onCompletion: { (user, error) in
+            
             guard let user = user else {
-                 fatalError(String(describing: error))
+                                 fatalError(String(describing: error))
             }
             
             DispatchQueue.main.async {
-                // Open Realm
-                let configuration = Realm.Configuration(
-                    syncConfiguration: SyncConfiguration(user: user, realmURL: Constants.syncServerURL)
-                )
+                let config = SyncConfiguration.init(user: user, realmURL: Constants.syncServerURL)
                 
-                self.realm = try! Realm(configuration: configuration)
+                var defaultConfig = Realm.Configuration.defaultConfiguration
+                defaultConfig.syncConfiguration = config
+                
+                self.realm = try! Realm(configuration: defaultConfig)                
             }
-        }        
+        })
+
+        
+//        
+//        SyncUser.logIn(with: .usernamePassword(username: userName, password: password, register: false), server: Constants.syncAuthURL) { user, error in
+//            guard let user = user else {
+//                 fatalError(String(describing: error))
+//            }
+//            
+//            DispatchQueue.main.async {
+//                // Open Realm
+//                let configuration = Realm.Configuration(
+//                    syncConfiguration: SyncConfiguration(user: user, realmURL: Constants.syncServerURL)
+//                )
+//                
+//                let creds = SyncCredentials.usernamePassword(username: userName, password: password, register: false)
+//                
+//                SyncUser.logIn(with: creds, server: Constants.syncServerURL, onCompletion: { (user, error) in
+//                    
+//                    if user != nil  {
+//                    
+//                       let config = SyncConfiguration.init(user: user!, realmURL: Constants.syncServerURL)
+//                        
+//                    }
+//                })
+//                
+//                self.realm = try! Realm(configuration: configuration)
+//            }
+//        }        
     }
     
     func writeData(data: Users) {
@@ -86,7 +118,6 @@ class RealmServer {
     func shouldShowNotifcationForLocationAccess(user: Users) {
         let userDefaults = UserDefaults.standard
         let deviceID = userDefaults.value(forKey: "uniqueID") as? String
-        
         
         for eachUser in user.listOfUsers {
             if eachUser.deviceID == deviceID {

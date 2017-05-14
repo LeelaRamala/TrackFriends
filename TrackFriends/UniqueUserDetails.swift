@@ -10,6 +10,7 @@ import RealmSwift
 
 class UniqueUserDetails: Object {
     dynamic var phone: String?
+    dynamic var name: String?
     dynamic var deviceID: String?
     dynamic var isRequestedForLocationAccess = false
     var latitude: Float?

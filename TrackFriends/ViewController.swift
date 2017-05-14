@@ -41,7 +41,7 @@ class TFMapLocateMeViewController: UIViewController {
         if let yPosition = self.navigationController?.navigationBar.frame.maxY {
             let frame = CGRect(x: self.view.frame.origin.x, y: yPosition, width: self.view.bounds.width, height: 30)
             
-            self.bannerView = TFBannerView(withFrame: frame, message: "Tap on Phone icon to enter your phone number. This is to help your friend to locate friends by asking permission")
+            self.bannerView = TFBannerView(withFrame: frame, message: "Tap on Add Number button to enter your phone number. This is to help your friend to locate you. Tap this view to dismiss.")
             guard  let bannerView = self.bannerView else { return }
             
             self.view.addSubview(bannerView)
@@ -127,33 +127,45 @@ class TFMapLocateMeViewController: UIViewController {
 }
 
 extension TFMapLocateMeViewController: CNContactPickerDelegate {
-    public func contactPicker(_ picker: CNContactPickerViewController, didSelect contactProperty: CNContactProperty) {
-         let value = contactProperty.contact.phoneNumbers[0].value.stringValue
-            if let users = self.appDelegate?.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
-               self.updateUniqueUserForValue(number: value, user: users)
-            }
+    
+    
+    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        let userName = contact.givenName
+        
+        // user phone number
+        let userPhoneNumbers:[CNLabeledValue<CNPhoneNumber>] = contact.phoneNumbers
+        let firstPhoneNumber:CNPhoneNumber = userPhoneNumbers[0].value
+        
+        // user phone number string
+        let primaryPhoneNumber = firstPhoneNumber.stringValue
+        
+        if let users = self.appDelegate?.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
+            self.updateUniqueUserForValue(number: primaryPhoneNumber, name: userName, user: users)
+        }
     }
     
-    func updateUniqueUserForValue(number: String, user: Users) {
+    func updateUniqueUserForValue(number: String, name: String, user: Users) {
         let phoneValue = number.components(separatedBy: CharacterSet.decimalDigits.inverted)
             .joined()
         
         for eachUniqueUser in user.listOfUsers {
+            
             if eachUniqueUser.phone == phoneValue {
                 
+
                 try! self.appDelegate?.realmServer?.realm?.write {
+                    eachUniqueUser.name = name
                     eachUniqueUser.isRequestedForLocationAccess = true
-                     self.appDelegate?.realmServer?.registerNotification()
+                    
                 }
+                self.appDelegate?.realmServer?.registerNotification()
                 
                 break
             }
         }
 
     }
-    
-    
-    
+
 }
 
 extension TFMapLocateMeViewController: CLLocationManagerDelegate {
@@ -193,6 +205,19 @@ extension TFMapLocateMeViewController: CLLocationManagerDelegate {
         
         return nil
     }
+    
+    func addAnnotaitionView() {
+        if let users = self.appDelegate?.realmServer?.fetchUsersData(), users.listOfUsers.isEmpty == false  {
+            for eachUser in users.listOfUsers {
+                if eachUser.latitude != nil && eachUser.longitude != nil {
+                    
+                    let coordinate = CLLocationCoordinate2D(latitude: Double(eachUser.latitude!), longitude: Double(eachUser.longitude!))
+                    let annotationView = AnnotationView(title: eachUser.name, subTitle: "", coordinate: coordinate)
+                    self.mapView.addAnnotation(annotationView)
+                }
+            }
+        }
+    }
 
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -210,21 +235,28 @@ extension TFMapLocateMeViewController: CLLocationManagerDelegate {
                     self.mapView.setRegion(region, animated: true)
                 }
                 else {
-                    // Start updating latitude and logitude to server
                     
+                    // TODO: Start updating latitude and logitude to server based on timer
                     if let user = self.findUser() {
-                        user.updateCordinates(longitude: Float(finalLocation.coordinate.longitude), latitude: Float(finalLocation.coordinate.latitude))
+                        
+                        try! self.appDelegate?.realmServer?.realm?.write {
+                            user.updateCordinates(longitude: Float(finalLocation.coordinate.longitude), latitude: Float(finalLocation.coordinate.latitude))
+                        }
                     }
+                    
+                    self.addAnnotaitionView()
                 }
             }
         }
     }
 }
 
+
+// Location methods
 extension TFMapLocateMeViewController: MKMapViewDelegate {
      public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
-        var view: MKPinAnnotationView?
+        var view: MKAnnotationView?
         
         if let annView = mapView.dequeueReusableAnnotationView(withIdentifier: "annotationView") as? MKPinAnnotationView {
             annView.annotation = annotation
@@ -232,12 +264,12 @@ extension TFMapLocateMeViewController: MKMapViewDelegate {
         }
         else {
             let annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "annotationView")
+            annotationView.image = UIImage(named: "image_user")
             annotationView.canShowCallout = true
             annotationView.calloutOffset = CGPoint(x: -5.0, y: -5.0)
             view = annotationView
         }
         
-        view?.pinTintColor = MKPinAnnotationView.purplePinColor()
         return view
     }
 }

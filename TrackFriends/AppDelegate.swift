@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         self.realmServer = RealmServer()
         self.realmServer?.setupRealm()
-        self.realmServer?.realm?.deleteAll()
+//        self.realmServer?.realm?.deleteAll()
         
         return true
     }
